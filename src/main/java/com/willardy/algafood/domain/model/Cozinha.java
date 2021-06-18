@@ -1,6 +1,9 @@
 package com.willardy.algafood.domain.model;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 public class Cozinha {
@@ -10,6 +13,14 @@ public class Cozinha {
     private Long id;
 
     private String nome;
+
+    public Cozinha() {
+
+    }
+
+    public Cozinha(String nome) {
+        this.nome = nome;
+    }
 
     public Long getId() {
         return id;
@@ -26,6 +37,7 @@ public class Cozinha {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
 
     @Override
     public int hashCode() {
@@ -45,10 +57,7 @@ public class Cozinha {
             return false;
         Cozinha other = (Cozinha) obj;
         if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        return true;
+            return other.id == null;
+        } else return id.equals(other.id);
     }
 }
