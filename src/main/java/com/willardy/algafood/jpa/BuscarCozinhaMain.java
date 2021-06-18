@@ -8,16 +8,13 @@ import org.springframework.context.ApplicationContext;
 
 import java.util.List;
 
-public class InclusaoCozinhaMain {
+public class BuscarCozinhaMain {
     public static void main(String[] args) {
         ApplicationContext applicationContext = new SpringApplicationBuilder(ApiAlgafoodApplication.class).web(WebApplicationType.NONE).run(args);
 
         CadastroCozinha cadastroCozinha = applicationContext.getBean(CadastroCozinha.class);
+        Cozinha cozinha = cadastroCozinha.buscar(3L);
 
-        Cozinha cozinha1 = new Cozinha("Brasileira");
-        Cozinha cozinha2 = new Cozinha("Japonesa");
-
-        cadastroCozinha.adicionar(cozinha1);
-        cadastroCozinha.adicionar(cozinha2);
+        System.out.println(cozinha.getNome());
     }
 }

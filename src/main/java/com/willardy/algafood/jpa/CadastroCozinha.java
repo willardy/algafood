@@ -23,4 +23,7 @@ public class CadastroCozinha {
         return manager.merge(cozinha);
     }
 
+    public Cozinha buscar(long id) {
+        return manager.find(Cozinha.class, id);
+    }
 }
