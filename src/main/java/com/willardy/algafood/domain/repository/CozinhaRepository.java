@@ -7,7 +7,10 @@ import java.util.List;
 public interface CozinhaRepository {
 
     List<Cozinha> all();
+
     Cozinha findById(Long id);
+
     Cozinha save(Cozinha cozinha);
+
     void remove(Cozinha cozinha);
 }
