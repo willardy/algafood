@@ -11,13 +11,16 @@ import java.math.BigDecimal;
 @Entity
 public class Restaurante {
 
-	@Id
-	@EqualsAndHashCode.Include
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @EqualsAndHashCode.Include
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	private String nome;
+    private String nome;
 
-	@Column(name = "taxa_frete")
-	private BigDecimal taxaFrete;
+    @Column(name = "taxa_frete")
+    private BigDecimal taxaFrete;
+
+    @ManyToOne
+    private Cozinha cozinha;
 }
