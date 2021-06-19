@@ -2,12 +2,14 @@ package com.willardy.algafood.infrastructure.repository;
 
 import com.willardy.algafood.domain.model.Cidade;
 import com.willardy.algafood.domain.repository.CidadeRepository;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
+@Repository
 public class CidadeRepositoryJPA implements CidadeRepository {
 
     @PersistenceContext
