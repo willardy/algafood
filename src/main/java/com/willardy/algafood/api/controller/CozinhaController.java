@@ -4,6 +4,7 @@ import com.willardy.algafood.domain.model.Cozinha;
 import com.willardy.algafood.domain.repository.CozinhaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,13 +17,16 @@ public class CozinhaController {
     private CozinhaRepository cozinhaRepository;
 
     @GetMapping
-    public List<Cozinha> all() {
-        return cozinhaRepository.all();
+    public ResponseEntity<List<Cozinha>> all() {
+        List<Cozinha> cozinhas =  cozinhaRepository.all();
+
+        return ResponseEntity.status(HttpStatus.OK).body(cozinhas);
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Cozinha findById(@PathVariable Long id){
-        return cozinhaRepository.findById(id);
+    public ResponseEntity<Cozinha> findById(@PathVariable Long id){
+        Cozinha cozinha = cozinhaRepository.findById(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(cozinha);
     }
 }

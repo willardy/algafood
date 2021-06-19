@@ -3,6 +3,8 @@ package com.willardy.algafood.api.controller;
 import com.willardy.algafood.domain.model.Estado;
 import com.willardy.algafood.domain.repository.EstadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +19,9 @@ public class EstadoController {
     private EstadoRepository estadoRepository;
 
     @GetMapping
-    public List<Estado> all(){
-        return estadoRepository.all();
+    public ResponseEntity<List<Estado>> all(){
+        List<Estado> estados = estadoRepository.all();
+
+        return ResponseEntity.status(HttpStatus.OK).body(estados);
     }
 }
