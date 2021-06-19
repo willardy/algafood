@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class Cidade {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
 

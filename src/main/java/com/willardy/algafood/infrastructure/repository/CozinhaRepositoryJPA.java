@@ -2,7 +2,6 @@ package com.willardy.algafood.infrastructure.repository;
 
 import com.willardy.algafood.domain.model.Cozinha;
 import com.willardy.algafood.domain.repository.CozinhaRepository;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
