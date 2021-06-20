@@ -2,6 +2,7 @@ package com.willardy.algafood.infrastructure.repository;
 
 import com.willardy.algafood.domain.model.Restaurante;
 import com.willardy.algafood.domain.repository.RestauranteRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,8 +34,13 @@ public class RestauranteRepositoryJPA implements RestauranteRepository {
 
     @Transactional
     @Override
-    public void remove(Restaurante restaurante) {
-        restaurante = findById(restaurante.getId());
+    public void remove(Long id) {
+        Restaurante restaurante = findById(id);
+
+        if(restaurante == null){
+            throw new EmptyResultDataAccessException(1);
+        }
+
         manager.remove(restaurante);
     }
 }
