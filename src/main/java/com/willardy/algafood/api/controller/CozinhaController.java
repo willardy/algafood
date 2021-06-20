@@ -1,11 +1,12 @@
 package com.willardy.algafood.api.controller;
 
+import com.willardy.algafood.domain.exception.EntidadeEmUsoException;
+import com.willardy.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.willardy.algafood.domain.model.Cozinha;
 import com.willardy.algafood.domain.repository.CozinhaRepository;
 import com.willardy.algafood.domain.service.CadastroCozinhaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -62,17 +63,15 @@ public class CozinhaController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Cozinha> remove(@PathVariable Long id) {
-        Cozinha cozinha = cozinhaRepository.findById(id);
-
         try {
-            if (cozinha != null) {
-                cozinhaRepository.remove(cozinha);
-                return ResponseEntity.noContent().build();
-            }
-
-            return ResponseEntity.notFound().build();
-        } catch (DataIntegrityViolationException e) {
+            cadastroCozinhaService.remove(id);
+            return ResponseEntity.noContent().build();
+        } catch (EntidadeEmUsoException e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        } catch (EntidadeNaoEncontradaException e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.notFound().build();
         }
     }
 }
