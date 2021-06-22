@@ -22,6 +22,11 @@ public class CozinhaRepositoryJPA implements CozinhaRepository {
     }
 
     @Override
+    public List<Cozinha> findByName(String name) {
+        return manager.createQuery("from Cozinha where nome like :name", Cozinha.class).setParameter("name", "%" + name + "%").getResultList();
+    }
+
+    @Override
     public Cozinha findById(Long id) {
         return manager.find(Cozinha.class, id);
     }
@@ -37,7 +42,7 @@ public class CozinhaRepositoryJPA implements CozinhaRepository {
     public void remove(Long id) {
         Cozinha cozinha = findById(id);
 
-        if(cozinha == null){
+        if (cozinha == null) {
             throw new EmptyResultDataAccessException(1);
         }
 
