@@ -1,5 +1,6 @@
 package com.willardy.algafood.api.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.willardy.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.willardy.algafood.domain.model.Restaurante;
 import com.willardy.algafood.domain.repository.RestauranteRepository;
@@ -8,9 +9,12 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -65,5 +69,32 @@ public class RestauranteController {
         } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> updateParctional(@PathVariable Long id, @RequestBody Map<String, Object> campos){
+        Restaurante restauranteAtual = restauranteRepository.findById(id);
+
+        if(restauranteAtual == null){
+            return ResponseEntity.notFound().build();
+        }
+
+        merge(campos, restauranteAtual);
+
+        return update(id,restauranteAtual);
+    }
+
+    private void merge(Map<String, Object> campos, Restaurante restaurante) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Restaurante restauranteOrigem = objectMapper.convertValue(campos, Restaurante.class);
+
+        campos.forEach((nomeProprierade, valorPropriedade) -> {
+            Field field = ReflectionUtils.findField(Restaurante.class, nomeProprierade);
+            field.setAccessible(true);
+
+            Object novoValor = ReflectionUtils.getField(field, restauranteOrigem);
+
+            ReflectionUtils.setField(field, restaurante, novoValor);
+        });
     }
 }
