@@ -73,7 +73,7 @@ public class EstadoController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<?> save(@RequestBody Estado estado){
+    public ResponseEntity<Estado> save(@RequestBody Estado estado){
         try {
             estado = cadastroEstadoService.saveOrUpdate(estado);
             return ResponseEntity.status(HttpStatus.CREATED).body(estado);

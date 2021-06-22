@@ -4,6 +4,7 @@ import com.willardy.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.willardy.algafood.domain.model.Estado;
 import com.willardy.algafood.domain.repository.EstadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,12 +18,10 @@ public class CadastroEstadoService {
     }
 
     public void remove(Long id){
-        Estado estado = estadoRepository.findById(id);
-
-        if(estado == null){
+        try {
+            estadoRepository.remove(id);
+        } catch (EmptyResultDataAccessException e){
             throw new EntidadeNaoEncontradaException(String.format("O estado de id %d não existe", id));
         }
-
-        estadoRepository.remove(estado.getId());
     }
 }

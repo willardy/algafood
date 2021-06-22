@@ -2,6 +2,7 @@ package com.willardy.algafood.infrastructure.repository;
 
 import com.willardy.algafood.domain.model.Estado;
 import com.willardy.algafood.domain.repository.EstadoRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +35,11 @@ public class EstadoRepositoryJPA implements EstadoRepository {
     @Override
     public void remove(Long id) {
         Estado estado = findById(id);
+
+        if(estado == null){
+            throw new EmptyResultDataAccessException(1);
+        }
+
         manager.remove(estado);
     }
 }
