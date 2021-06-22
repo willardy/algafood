@@ -2,6 +2,7 @@ package com.willardy.algafood.infrastructure.repository;
 
 import com.willardy.algafood.domain.model.Cidade;
 import com.willardy.algafood.domain.repository.CidadeRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,18 +23,27 @@ public class CidadeRepositoryJPA implements CidadeRepository {
 
     @Override
     public Cidade findById(Long id) {
-        return manager.find(Cidade.class, id);
+        Cidade cidade = manager.find(Cidade.class, id);
+
+        return cidade;
     }
 
-    @Transactional
     @Override
+    @Transactional
     public Cidade save(Cidade cidade) {
         return manager.merge(cidade);
     }
 
     @Override
-    public void remove(Cidade cidade) {
-        cidade = findById(cidade.getId());
+    @Transactional
+    public void remove(Long id) {
+        Cidade cidade = findById(id);
+
+        if (cidade == null) {
+            throw new EmptyResultDataAccessException(1);
+        }
+
+
         manager.remove(cidade);
     }
 }

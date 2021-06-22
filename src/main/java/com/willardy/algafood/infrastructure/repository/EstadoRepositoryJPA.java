@@ -26,13 +26,14 @@ public class EstadoRepositoryJPA implements EstadoRepository {
         return manager.find(Estado.class, id);
     }
 
-    @Transactional
     @Override
+    @Transactional
     public Estado save(Estado estado) {
         return manager.merge(estado);
     }
 
     @Override
+    @Transactional
     public void remove(Long id) {
         Estado estado = findById(id);
 

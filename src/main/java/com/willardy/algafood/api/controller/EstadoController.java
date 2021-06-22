@@ -1,5 +1,6 @@
 package com.willardy.algafood.api.controller;
 
+import com.willardy.algafood.domain.exception.EntidadeEmUsoException;
 import com.willardy.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.willardy.algafood.domain.model.Estado;
 import com.willardy.algafood.domain.repository.EstadoRepository;
@@ -61,18 +62,18 @@ public class EstadoController {
     }
 
     @DeleteMapping("/{id}")
-    @Transactional
-    public ResponseEntity<Estado> remove(@PathVariable Long id) {
+    public ResponseEntity<?> remove(@PathVariable Long id) {
         try {
             cadastroEstadoService.remove(id);
             return ResponseEntity.noContent().build();
         } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.notFound().build();
+        } catch (EntidadeEmUsoException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @PostMapping
-    @Transactional
     public ResponseEntity<Estado> save(@RequestBody Estado estado){
         try {
             estado = cadastroEstadoService.saveOrUpdate(estado);

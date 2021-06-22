@@ -10,3 +10,8 @@ insert into restaurante (nome, taxa_frete, cozinha_id) values ('Arrumadinho da A
 insert into estado (nome) values ('Piauí')
 insert into estado (nome) values ('Maranhão')
 insert into estado (nome) values ('Ceará')
+
+insert into cidade (nome, estado_id) values ('Teresina', 1)
+insert into cidade (nome, estado_id) values ('São Luis', 2)
+insert into cidade (nome, estado_id) values ('Fortaleza', 3)
+insert into cidade (nome, estado_id) values ('São Raimundo Nonato', 1)
