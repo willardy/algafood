@@ -32,8 +32,8 @@ public class EstadoRepositoryJPA implements EstadoRepository {
     }
 
     @Override
-    public void remove(Estado estado) {
-        estado = findById(estado.getId());
+    public void remove(Long id) {
+        Estado estado = findById(id);
         manager.remove(estado);
     }
 }
