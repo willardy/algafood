@@ -13,6 +13,6 @@ public interface CozinhaRepository extends JpaRepository<Cozinha, Long> {
 
     //https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation
 
-    @Query("from Cozinha where nome like %:name%")
+//    @Query("from Cozinha where nome like %:name%")
     List<Cozinha> findByName(@Param("name") String name);
 }
