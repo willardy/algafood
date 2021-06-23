@@ -10,10 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/estados")
@@ -27,17 +27,17 @@ public class EstadoController {
 
     @GetMapping
     public ResponseEntity<List<Estado>> all() {
-        List<Estado> estados = estadoRepository.all();
+        List<Estado> estados = estadoRepository.findAll();
 
         return ResponseEntity.status(HttpStatus.OK).body(estados);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Estado> findById(@PathVariable Long id) {
-        Estado estado = estadoRepository.findById(id);
+        Optional<Estado> estado = estadoRepository.findById(id);
 
-        if (estado != null) {
-            return ResponseEntity.ok().body(estado);
+        if (estado.isPresent()) {
+            return ResponseEntity.ok().body(estado.get());
         }
 
         return ResponseEntity.notFound().build();
@@ -45,12 +45,12 @@ public class EstadoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Estado> update(@PathVariable Long id, @RequestBody Estado estado) {
-        Estado estadoAtual = estadoRepository.findById(id);
+        Optional<Estado> estadoAtual = estadoRepository.findById(id);
 
         try {
-            if (estadoAtual != null) {
+            if (estadoAtual.isPresent()) {
                 BeanUtils.copyProperties(estado, estadoAtual, "id");
-                estado = cadastroEstadoService.saveOrUpdate(estadoAtual);
+                estado = cadastroEstadoService.saveOrUpdate(estadoAtual.get());
 
                 return ResponseEntity.ok(estado);
             } else {
@@ -68,17 +68,17 @@ public class EstadoController {
             return ResponseEntity.noContent().build();
         } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.notFound().build();
-        } catch (EntidadeEmUsoException e){
+        } catch (EntidadeEmUsoException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
     }
 
     @PostMapping
-    public ResponseEntity<Estado> save(@RequestBody Estado estado){
+    public ResponseEntity<Estado> save(@RequestBody Estado estado) {
         try {
             estado = cadastroEstadoService.saveOrUpdate(estado);
             return ResponseEntity.status(HttpStatus.CREATED).body(estado);
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }

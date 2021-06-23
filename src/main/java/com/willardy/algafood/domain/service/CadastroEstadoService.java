@@ -21,7 +21,7 @@ public class CadastroEstadoService {
 
     public void remove(Long id){
         try {
-            estadoRepository.remove(id);
+            estadoRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e){
             throw new EntidadeNaoEncontradaException(String.format("O estado de id %d não existe", id));
         } catch (DataIntegrityViolationException e){
