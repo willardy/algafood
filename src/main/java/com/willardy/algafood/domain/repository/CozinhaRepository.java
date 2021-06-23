@@ -8,5 +8,8 @@ import java.util.List;
 
 @Repository
 public interface CozinhaRepository extends JpaRepository<Cozinha, Long> {
-//    List<Cozinha> findByName(String name);
+
+    //https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation
+    List<Cozinha> findByNome(String name);
+    List<Cozinha> findByNomeContaining(String name);
 }
