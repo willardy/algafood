@@ -5,11 +5,10 @@ import com.willardy.algafood.domain.model.Cozinha;
 import com.willardy.algafood.domain.model.Restaurante;
 import com.willardy.algafood.domain.repository.CozinhaRepository;
 import com.willardy.algafood.domain.repository.RestauranteRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class CadastroRestauranteService {
@@ -22,14 +21,14 @@ public class CadastroRestauranteService {
 
     public Restaurante saveOrUpdate(Restaurante restaurante) {
         Long cozinhaId = restaurante.getCozinha().getId();
-        Cozinha cozinha = cozinhaRepository.findById(cozinhaId);
+        Optional<Cozinha> cozinha = cozinhaRepository.findById(cozinhaId);
 
-        if (cozinha == null) {
+        if (cozinha.isEmpty()) {
             throw new EntidadeNaoEncontradaException(
                     String.format("Não existe cadastro de cozinha com código %d", cozinhaId));
         }
 
-        restaurante.setCozinha(cozinha);
+        restaurante.setCozinha(cozinha.get());
 
         return restauranteRepository.save(restaurante);
     }

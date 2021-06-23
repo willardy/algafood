@@ -21,7 +21,7 @@ public class CadastroCozinhaService {
 
     public void remove(Long id) {
         try {
-            cozinhaRepository.remove(id);
+            cozinhaRepository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(
                     String.format("Cozinha de código %d não pode ser reomvida, pois está em uso", id));
