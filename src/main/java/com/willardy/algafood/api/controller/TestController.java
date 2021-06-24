@@ -29,7 +29,7 @@ public class TestController {
     }
 
     @GetMapping("/restaurantes")
-    public List<Restaurante> findByRestaurante(@RequestParam("nome") String name, @RequestParam BigDecimal taxaInicial, @RequestParam BigDecimal taxaFinal){
-        return restauranteRepository.find(name, taxaInicial, taxaFinal);
+    public List<Restaurante> findByRestaurante(String nome, BigDecimal taxaInicial, BigDecimal taxaFinal){
+        return restauranteRepository.find(nome, taxaInicial, taxaFinal);
     }
 }
