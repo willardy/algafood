@@ -17,8 +17,8 @@ INSERT INTO cidade (nome, estado_id) values ('São Luis', 2)
 INSERT INTO cidade (nome, estado_id) values ('Fortaleza', 3)
 INSERT INTO cidade (nome, estado_id) values ('São Raimundo Nonato', 1)
 
-INSERT INTO forma_pagamento (id, descricao) VALUES (1, "Cartão de Crédito")
-INSERT INTO forma_pagamento (id, descricao) VALUES (2, "Cartão de Débito")
-INSERT INTO forma_pagamento (id, descricao) VALUES (3, "Dinheiro")
+INSERT INTO forma_pagamento (descricao) VALUES ('Cartão de Crédito')
+INSERT INTO forma_pagamento (descricao) VALUES ('Cartão de Débito')
+INSERT INTO forma_pagamento (descricao) VALUES ('Dinheiro')
 
 INSERT INTO restaurante_forma_pagamento (restaurante_id, forma_pagamento_id) VALUES (1,1), (1,2), (1,3), (2,2), (3,1), (4,2), (4,3)
