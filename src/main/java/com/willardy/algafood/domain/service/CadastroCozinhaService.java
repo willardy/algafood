@@ -33,6 +33,6 @@ public class CadastroCozinhaService {
     }
 
     public Cozinha buscaOuFalha(Long id){
-        return cozinhaRepository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException(MSG_COZINHA_EM_USO));
+        return cozinhaRepository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException(String.format(MSG_COZINHA_EM_USO, id)));
     }
 }

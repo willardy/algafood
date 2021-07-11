@@ -14,6 +14,9 @@ import java.util.Optional;
 @Service
 public class CadastroCidadeService {
 
+    public static final String MSG_CIDADE_NAO_ENCONTRADA = "A cidade com id %d não existe";
+    public static final String MSG_ESTADO_NAO_ENCONTRADO = "Não existe cadastro de estado com código %d";
+
     @Autowired
     private CidadeRepository cidadeRepository;
 
@@ -25,7 +28,7 @@ public class CadastroCidadeService {
         Optional<Estado> estado = estadoRepository.findById(estadoId);
 
         if (estado.isEmpty()) {
-            throw new EntidadeNaoEncontradaException(String.format("Não existe cadastro de estado com código %d", estadoId));
+            throw new EntidadeNaoEncontradaException(String.format(MSG_ESTADO_NAO_ENCONTRADO, estadoId));
         }
 
         cidade.setEstado(estado.get());
@@ -37,7 +40,11 @@ public class CadastroCidadeService {
         try {
             cidadeRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new EntidadeNaoEncontradaException(String.format("A cidade com id %d não existe", id));
+            throw new EntidadeNaoEncontradaException(String.format(MSG_CIDADE_NAO_ENCONTRADA, id));
         }
+    }
+
+    public Cidade buscaOuFalha(Long id){
+        return cidadeRepository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException(String.format(MSG_CIDADE_NAO_ENCONTRADA, id)));
     }
 }

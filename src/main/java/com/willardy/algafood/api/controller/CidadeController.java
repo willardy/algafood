@@ -1,6 +1,5 @@
 package com.willardy.algafood.api.controller;
 
-import com.willardy.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.willardy.algafood.domain.model.Cidade;
 import com.willardy.algafood.domain.repository.CidadeRepository;
 import com.willardy.algafood.domain.service.CadastroCidadeService;
@@ -11,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/cidades")
@@ -30,50 +28,28 @@ public class CidadeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cidade> findById(@PathVariable Long id) {
-        try {
-            Optional<Cidade> cidade = cidadeRepository.findById(id);
-            return ResponseEntity.ok(cidade.get());
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public Cidade findById(@PathVariable Long id) {
+        return cadastroCidadeService.buscaOuFalha(id);
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody Cidade cidade) {
-        try {
-            cidade = cadastroCidadeService.saveOrUpdate(cidade);
-            return ResponseEntity.status(HttpStatus.CREATED).body(cidade);
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @ResponseStatus(HttpStatus.CREATED)
+    public Cidade save(@RequestBody Cidade cidade) {
+        return cadastroCidadeService.saveOrUpdate(cidade);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Cidade cidade) {
+    public Cidade update(@PathVariable Long id, @RequestBody Cidade cidade) {
+        Cidade cidadeAtual = cadastroCidadeService.buscaOuFalha(id);
 
-        try {
-            Optional<Cidade> cidadeAtual = cidadeRepository.findById(id);
-            if (cidadeAtual.isPresent()) {
-                BeanUtils.copyProperties(cidade, cidadeAtual, "id");
-                Cidade cidadeNova =cadastroCidadeService.saveOrUpdate(cidadeAtual.get());
+        BeanUtils.copyProperties(cidade, cidadeAtual, "id");
 
-                return ResponseEntity.ok(cidadeNova);
-            }
-
-            return ResponseEntity.notFound().build();
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return cadastroCidadeService.saveOrUpdate(cidadeAtual);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> remove(@PathVariable Long id){
-        try {
-            cadastroCidadeService.remove(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void remove(@PathVariable Long id) {
+        cadastroCidadeService.remove(id);
     }
 }
