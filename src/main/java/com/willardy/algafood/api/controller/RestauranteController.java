@@ -1,6 +1,8 @@
 package com.willardy.algafood.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.willardy.algafood.domain.exception.EntidadeNaoEncontradaException;
+import com.willardy.algafood.domain.exception.NegocioException;
 import com.willardy.algafood.domain.model.Restaurante;
 import com.willardy.algafood.domain.repository.RestauranteRepository;
 import com.willardy.algafood.domain.service.CadastroRestauranteService;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -41,7 +42,11 @@ public class RestauranteController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Restaurante save(@RequestBody Restaurante restaurante) {
-        return cadastroRestauranteService.saveOrUpdate(restaurante);
+        try {
+            return cadastroRestauranteService.saveOrUpdate(restaurante);
+        } catch (EntidadeNaoEncontradaException e) {
+            throw new NegocioException(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
@@ -50,7 +55,11 @@ public class RestauranteController {
 
         BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
 
-        return cadastroRestauranteService.saveOrUpdate(restauranteAtual);
+        try {
+            return cadastroRestauranteService.saveOrUpdate(restauranteAtual);
+        } catch (EntidadeNaoEncontradaException e) {
+            throw new NegocioException(e.getMessage());
+        }
     }
 
     @PatchMapping("/{id}")
