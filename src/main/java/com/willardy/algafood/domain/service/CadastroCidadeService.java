@@ -1,5 +1,6 @@
 package com.willardy.algafood.domain.service;
 
+import com.willardy.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.willardy.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.willardy.algafood.domain.model.Cidade;
 import com.willardy.algafood.domain.model.Estado;
@@ -14,7 +15,6 @@ import java.util.Optional;
 @Service
 public class CadastroCidadeService {
 
-    public static final String MSG_CIDADE_NAO_ENCONTRADA = "A cidade com id %d não existe";
     public static final String MSG_ESTADO_NAO_ENCONTRADO = "Não existe cadastro de estado com código %d";
 
     @Autowired
@@ -40,11 +40,11 @@ public class CadastroCidadeService {
         try {
             cidadeRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new EntidadeNaoEncontradaException(String.format(MSG_CIDADE_NAO_ENCONTRADA, id));
+            throw new CidadeNaoEncontradaException(id);
         }
     }
 
     public Cidade buscaOuFalha(Long id){
-        return cidadeRepository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException(String.format(MSG_CIDADE_NAO_ENCONTRADA, id)));
+        return cidadeRepository.findById(id).orElseThrow(() -> new CidadeNaoEncontradaException(id));
     }
 }

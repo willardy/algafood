@@ -1,6 +1,7 @@
 package com.willardy.algafood.api.controller;
 
 import com.willardy.algafood.domain.exception.EntidadeNaoEncontradaException;
+import com.willardy.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.willardy.algafood.domain.exception.NegocioException;
 import com.willardy.algafood.domain.model.Cidade;
 import com.willardy.algafood.domain.repository.CidadeRepository;
@@ -46,13 +47,12 @@ public class CidadeController {
 
     @PutMapping("/{id}")
     public Cidade update(@PathVariable Long id, @RequestBody Cidade cidade) {
-        Cidade cidadeAtual = cadastroCidadeService.buscaOuFalha(id);
-
-        BeanUtils.copyProperties(cidade, cidadeAtual, "id");
-
         try {
+            Cidade cidadeAtual = cadastroCidadeService.buscaOuFalha(id);
+
+            BeanUtils.copyProperties(cidade, cidadeAtual, "id");
             return cadastroCidadeService.saveOrUpdate(cidadeAtual);
-        } catch (EntidadeNaoEncontradaException e) {
+        } catch (EstadoNaoEncontradoException e) {
             throw new NegocioException(e.getMessage());
         }
     }

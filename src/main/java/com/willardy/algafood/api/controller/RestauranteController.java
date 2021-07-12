@@ -1,6 +1,7 @@
 package com.willardy.algafood.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.willardy.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.willardy.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.willardy.algafood.domain.exception.NegocioException;
 import com.willardy.algafood.domain.model.Restaurante;
@@ -44,7 +45,7 @@ public class RestauranteController {
     public Restaurante save(@RequestBody Restaurante restaurante) {
         try {
             return cadastroRestauranteService.saveOrUpdate(restaurante);
-        } catch (EntidadeNaoEncontradaException e) {
+        } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage());
         }
     }
@@ -57,7 +58,7 @@ public class RestauranteController {
 
         try {
             return cadastroRestauranteService.saveOrUpdate(restauranteAtual);
-        } catch (EntidadeNaoEncontradaException e) {
+        } catch (CozinhaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage());
         }
     }

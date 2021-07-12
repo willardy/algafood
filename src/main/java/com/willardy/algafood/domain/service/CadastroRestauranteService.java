@@ -1,6 +1,7 @@
 package com.willardy.algafood.domain.service;
 
 import com.willardy.algafood.domain.exception.EntidadeNaoEncontradaException;
+import com.willardy.algafood.domain.exception.RestauranteNaoEncontradoException;
 import com.willardy.algafood.domain.model.Cozinha;
 import com.willardy.algafood.domain.model.Restaurante;
 import com.willardy.algafood.domain.repository.CozinhaRepository;
@@ -12,9 +13,6 @@ import java.util.Optional;
 
 @Service
 public class CadastroRestauranteService {
-
-    public static final String MSG_COZINHA_NAO_ENCONTRADA = "Não existe cadastro de cozinha com código %d";
-    public static final String MSG_RESTAURANTE_NAO_ENCONTRADO = "Não existe cadastro de restaurante com código %d";
 
     @Autowired
     private RestauranteRepository restauranteRepository;
@@ -35,6 +33,6 @@ public class CadastroRestauranteService {
     }
 
     public Restaurante buscaOuFalha(Long id) {
-        return restauranteRepository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException(String.format(MSG_COZINHA_NAO_ENCONTRADA, id)));
+        return restauranteRepository.findById(id).orElseThrow(() -> new RestauranteNaoEncontradoException(id));
     }
 }

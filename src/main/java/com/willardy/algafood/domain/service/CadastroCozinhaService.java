@@ -1,5 +1,6 @@
 package com.willardy.algafood.domain.service;
 
+import com.willardy.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.willardy.algafood.domain.exception.EntidadeEmUsoException;
 import com.willardy.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.willardy.algafood.domain.model.Cozinha;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class CadastroCozinhaService {
 
     public static final String MSG_COZINHA_EM_USO = "Cozinha de código %d não pode ser reomvida, pois está em uso";
+
     @Autowired
     private CozinhaRepository cozinhaRepository;
 
@@ -28,11 +30,11 @@ public class CadastroCozinhaService {
                     String.format(MSG_COZINHA_EM_USO, id));
 
         } catch (EmptyResultDataAccessException e) {
-            throw new EntidadeNaoEncontradaException(String.format("Nao existe um cadastro de cozinha com código %d", id));
+            throw new CozinhaNaoEncontradaException(id);
         }
     }
 
     public Cozinha buscaOuFalha(Long id){
-        return cozinhaRepository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException(String.format(MSG_COZINHA_EM_USO, id)));
+        return cozinhaRepository.findById(id).orElseThrow(() -> new CozinhaNaoEncontradaException(id));
     }
 }
