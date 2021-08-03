@@ -1,6 +1,7 @@
 package com.willardy.algafood.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.willardy.algafood.Groups;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
@@ -26,17 +27,17 @@ public class Restaurante {
 
 //    @NotNull //valida somente se está null
 //    @NotEmpty //valida também se tem uma string vazia
-    @NotBlank // Valida também se tem uma string com caracteres vazios
+    @NotBlank(groups = Groups.CadastroRestaurante.class) // Valida também se tem uma string com caracteres vazios
     @Column(nullable = false)
     private String nome;
 
 //    @DecimalMin("0")
-    @PositiveOrZero
+    @PositiveOrZero(groups = Groups.CadastroRestaurante.class)
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
     @Valid
-    @NotNull
+    @NotNull(groups = Groups.CadastroRestaurante.class)
     @ManyToOne
     @JoinColumn(name = "cozinha_id", nullable = false)
     private Cozinha cozinha;
