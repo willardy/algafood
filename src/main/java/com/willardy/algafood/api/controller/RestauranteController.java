@@ -2,7 +2,6 @@ package com.willardy.algafood.api.controller;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.willardy.algafood.Groups;
 import com.willardy.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.willardy.algafood.domain.exception.NegocioException;
 import com.willardy.algafood.domain.model.Restaurante;
@@ -16,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,7 +48,7 @@ public class RestauranteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Restaurante save(@RequestBody @Validated(Groups.CadastroRestaurante.class) Restaurante restaurante) {
+    public Restaurante save(@RequestBody @Valid Restaurante restaurante) {
         try {
             return cadastroRestauranteService.saveOrUpdate(restaurante);
         } catch (CozinhaNaoEncontradaException e) {

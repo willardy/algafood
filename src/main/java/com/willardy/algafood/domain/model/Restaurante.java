@@ -10,6 +10,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,17 +29,18 @@ public class Restaurante {
 
 //    @NotNull //valida somente se está null
 //    @NotEmpty //valida também se tem uma string vazia
-    @NotBlank(groups = Groups.CadastroRestaurante.class) // Valida também se tem uma string com caracteres vazios
+    @NotBlank // Valida também se tem uma string com caracteres vazios
     @Column(nullable = false)
     private String nome;
 
 //    @DecimalMin("0")
-    @PositiveOrZero(groups = Groups.CadastroRestaurante.class)
+    @PositiveOrZero
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
     @Valid
-    @NotNull(groups = Groups.CadastroRestaurante.class)
+    @ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "cozinha_id", nullable = false)
     private Cozinha cozinha;
