@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -80,10 +81,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemType problemType = ProblemType.DADOS_INVALIDOS;
         String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
 
+        List<Problem.Field> fields = ex.getBindingResult().getFieldErrors()
+                .stream()
+                .map(fieldError ->
+                        Problem.Field.builder().name(fieldError.getField()).userMessage(fieldError.getDefaultMessage()).build()
+                )
+                .collect(Collectors.toList());
+
         Problem problem = createProblemBuilder(status, problemType, detail)
                 .userMessage(detail)
+                .fields(fields)
                 .build();
-
 
         return super.handleExceptionInternal(ex, problem, headers, status, request);
     }
@@ -190,10 +198,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private Problem.ProblemBuilder createProblemBuilder(HttpStatus status, ProblemType problemType, String detail) {
         return Problem.builder()
                 .type(problemType.getUri())
+                .localDateTime(LocalDateTime.now())
                 .title(problemType.getTitle())
                 .status(status.value())
-                .detail(detail)
-                .localDateTime(LocalDateTime.now());
+                .detail(detail);
     }
 
     private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex, HttpHeaders headers,
