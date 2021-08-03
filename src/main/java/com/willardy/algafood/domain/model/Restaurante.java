@@ -27,13 +27,10 @@ public class Restaurante {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @NotNull //valida somente se está null
-//    @NotEmpty //valida também se tem uma string vazia
-    @NotBlank // Valida também se tem uma string com caracteres vazios
+    @NotBlank(message = "Nome é obrigatório")
     @Column(nullable = false)
     private String nome;
 
-//    @DecimalMin("0")
     @PositiveOrZero
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
