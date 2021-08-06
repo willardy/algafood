@@ -2,6 +2,7 @@ package com.willardy.algafood.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.willardy.algafood.core.validation.Groups;
+import com.willardy.algafood.core.validation.Multiplo;
 import com.willardy.algafood.core.validation.TaxaFrete;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -36,7 +37,7 @@ public class Restaurante {
 
     @NotNull
 //    @PositiveOrZero
-    @TaxaFrete
+    @Multiplo(numero = 5)
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
