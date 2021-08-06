@@ -2,8 +2,7 @@ package com.willardy.algafood.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.willardy.algafood.core.validation.Groups;
-import com.willardy.algafood.core.validation.Multiplo;
-import com.willardy.algafood.core.validation.TaxaFrete;
+import com.willardy.algafood.core.validation.ValorZeroIncluiDescricao;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
@@ -21,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@ValorZeroIncluiDescricao(valorField = "taxaFrete", descricaoField = "nome", descricaoObrigatoria = "Frete Grátis")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -36,8 +36,7 @@ public class Restaurante {
     private String nome;
 
     @NotNull
-//    @PositiveOrZero
-    @Multiplo(numero = 5)
+    @PositiveOrZero
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
