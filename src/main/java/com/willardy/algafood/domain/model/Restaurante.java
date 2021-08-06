@@ -1,7 +1,7 @@
 package com.willardy.algafood.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.willardy.algafood.Groups;
+import com.willardy.algafood.core.validation.Groups;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
@@ -34,7 +34,7 @@ public class Restaurante {
     private String nome;
 
     @NotNull
-    @PositiveOrZero (message = "{taxaFrete.invalida}")
+    @PositiveOrZero
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 

@@ -1,4 +1,4 @@
-package com.willardy.algafood;
+package com.willardy.algafood.core.validation;
 
 public interface Groups {
 

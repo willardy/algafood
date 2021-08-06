@@ -1,6 +1,6 @@
 package com.willardy.algafood.domain.model;
 
-import com.willardy.algafood.Groups;
+import com.willardy.algafood.core.validation.Groups;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
