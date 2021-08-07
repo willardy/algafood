@@ -2,6 +2,7 @@ package com.willardy.algafood.api.controller;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.willardy.algafood.core.validation.ValidacaoException;
 import com.willardy.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.willardy.algafood.domain.exception.NegocioException;
 import com.willardy.algafood.domain.model.Restaurante;
@@ -15,10 +16,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +37,9 @@ public class RestauranteController {
 
     @Autowired
     private CadastroRestauranteService cadastroRestauranteService;
+
+    @Autowired
+    private SmartValidator validator;
 
     @GetMapping
     public ResponseEntity<List<Restaurante>> all() {
@@ -74,8 +81,18 @@ public class RestauranteController {
         Restaurante restauranteAtual = cadastroRestauranteService.buscaOuFalha(id);
 
         merge(campos, restauranteAtual, request);
+        valiate(restauranteAtual, "restaurante");
 
         return update(id, restauranteAtual);
+    }
+
+    private void valiate(Restaurante restaurante, String objectName) {
+        BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restaurante, objectName);
+        validator.validate(restaurante, bindingResult);
+
+        if(bindingResult.hasErrors()){
+            throw new ValidacaoException(bindingResult);
+        }
     }
 
     private void merge(Map<String, Object> campos, Restaurante restaurante, HttpServletRequest request) {
