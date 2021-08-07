@@ -12,7 +12,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Constraint(validatedBy = { ValorZeroIncluiDescricaoValidator.class })
 public @interface ValorZeroIncluiDescricao {
-    String message() default "multiplo inválido";
+    String message() default "descrição obrigatória inválida";
 
     Class<?>[] groups() default {};
 

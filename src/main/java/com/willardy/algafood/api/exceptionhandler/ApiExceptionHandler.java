@@ -13,6 +13,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -88,19 +90,28 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemType problemType = ProblemType.DADOS_INVALIDOS;
         String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
 
-        List<Problem.Field> fields = ex.getBindingResult().getFieldErrors()
+        List<Problem.Object> objects = ex.getBindingResult().getAllErrors()
                 .stream()
-                .map(fieldError -> {
-                            String message = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
+                .map(objectError -> {
+                            String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
 
-                            return Problem.Field.builder().name(fieldError.getField()).userMessage(message).build();
+                            String name = objectError.getObjectName();
+
+                            if(objectError instanceof FieldError){
+                                name = ((FieldError) objectError).getField();
+                            }
+
+                            return Problem.Object.builder()
+                                    .name(name)
+                                    .userMessage(message)
+                                    .build();
                         }
                 )
                 .collect(Collectors.toList());
 
         Problem problem = createProblemBuilder(status, problemType, detail)
                 .userMessage(detail)
-                .fields(fields)
+                .objects(objects)
                 .build();
 
         return super.handleExceptionInternal(ex, problem, headers, status, request);
