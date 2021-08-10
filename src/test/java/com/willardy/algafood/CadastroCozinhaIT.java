@@ -1,15 +1,19 @@
 package com.willardy.algafood;
 
+import com.willardy.algafood.domain.model.Cozinha;
+import com.willardy.algafood.domain.repository.CozinhaRepository;
+import com.willardy.algafood.utils.DatabaseCleaner;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static io.restassured.RestAssured.given;
@@ -19,13 +23,17 @@ import static org.hamcrest.Matchers.hasSize;
 //Configuração do JUNIT 5
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource("/application-test.properties")
 class CadastroCozinhaIT {
 
     @LocalServerPort
     private int port;
 
     @Autowired
-    private Flyway flyway;
+    private DatabaseCleaner databaseCleaner;
+
+    @Autowired
+    private CozinhaRepository cozinhaRepository;
 
     @BeforeEach
     public void setUp() {
@@ -33,7 +41,8 @@ class CadastroCozinhaIT {
         RestAssured.port = port;
         RestAssured.basePath = "/cozinhas";
 
-        flyway.migrate(); //inlcuido para resetar o banco de dados a cada execução
+        databaseCleaner.clearTables();
+        preparaDatabase();
     }
 
     @Test
@@ -47,19 +56,19 @@ class CadastroCozinhaIT {
     }
 
     @Test
-    public void deveConter4Cozinhas() {
+    public void deveConter2Cozinhas() {
         given()
                 .accept(ContentType.JSON)
                 .when()
                 .get()
                 .then()
-                .body("", hasSize(4))
+                .body("", hasSize(2))
                 //Essa linha nao é necessario nesse teste, porem fica de exemplo para testes onde precisam validar campos dos objetos de retorno
-                .body("nome", hasItems("Tailandesa", "Brasileira"));
+                .body("nome", hasItems("Italiana", "Brasileira"));
     }
 
     @Test
-    public void testRetornarStatus201_QuandoCadastrarCozinha() {
+    public void deveRetornarStatus201_QuandoCadastrarCozinha() {
         given()
                 .body("{ \"nome\": \"Francesa\" }")
                 .contentType(ContentType.JSON)
@@ -68,5 +77,15 @@ class CadastroCozinhaIT {
                 .post()
                 .then()
                 .statusCode(HttpStatus.CREATED.value());
+    }
+
+    private void preparaDatabase(){
+        Cozinha cozinha1 = new Cozinha();
+        cozinha1.setNome("Brasileira");
+        cozinhaRepository.save(cozinha1);
+
+        Cozinha cozinha2 = new Cozinha();
+        cozinha2.setNome("Italiana");
+        cozinhaRepository.save(cozinha2);
     }
 }
