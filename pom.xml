@@ -40,7 +40,7 @@
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <!-- NAO INCLUIDO NA VERSAO 2.3.0 OU SUPERIOR PELO SPRING BOOT, NECESSARIO INCLUIR MANUALMENTE-->
+        <!-- A VERSÃO 2.4.0 OU SUPÉRIOR NECESSITA DA DEPENDÊNCIA DO SPRING-BOOT-STARTER-VALIDATION DECLARADA DE FORMA EXPLICITA, JÁ QUE A MESMA NÃO É MAIS INCLUÍDA POR PADRÃO -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
