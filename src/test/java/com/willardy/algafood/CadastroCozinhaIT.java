@@ -6,7 +6,6 @@ import com.willardy.algafood.utils.DatabaseCleaner;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 
 //Configuração do JUNIT 5
 @ExtendWith(SpringExtension.class)
@@ -79,7 +77,30 @@ class CadastroCozinhaIT {
                 .statusCode(HttpStatus.CREATED.value());
     }
 
-    private void preparaDatabase(){
+    @Test
+    public void deveRetornarRespostaEStatusCorretos_QuandoConsultarCozinhaExistente() {
+        given()
+                .accept(ContentType.JSON)
+                .pathParam("cozinhaId", 2)
+                .when()
+                .get("/{cozinhaId}")
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .body("nome", equalTo("Italiana"));
+    }
+
+    @Test
+    public void deveRetornarStatus404_QuandoConsultarCozinhaInexistente() {
+        given()
+                .accept(ContentType.JSON)
+                .pathParam("cozinhaId", 100)
+                .when()
+                .get("/{cozinhaId}")
+                .then()
+                .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
+    private void preparaDatabase() {
         Cozinha cozinha1 = new Cozinha();
         cozinha1.setNome("Brasileira");
         cozinhaRepository.save(cozinha1);
