@@ -9,6 +9,7 @@ import com.willardy.algafood.domain.repository.EstadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -26,6 +27,7 @@ public class CadastroCidadeService {
     @Autowired
     private CadastroEstadoService cadastroEstadoService;
 
+    @Transactional
     public Cidade saveOrUpdate(Cidade cidade) {
         Long estadoId = cidade.getEstado().getId();
 
@@ -36,6 +38,7 @@ public class CadastroCidadeService {
         return cidadeRepository.save(cidade);
     }
 
+    @Transactional
     public void remove(Long id) {
         try {
             cidadeRepository.deleteById(id);

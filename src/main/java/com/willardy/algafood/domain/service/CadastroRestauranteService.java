@@ -8,6 +8,7 @@ import com.willardy.algafood.domain.repository.CozinhaRepository;
 import com.willardy.algafood.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -23,6 +24,7 @@ public class CadastroRestauranteService {
     @Autowired
     private CadastroCozinhaService cadastroCozinhaService;
 
+    @Transactional
     public Restaurante saveOrUpdate(Restaurante restaurante) {
         Long cozinhaId = restaurante.getCozinha().getId();
         Cozinha cozinha = cadastroCozinhaService.buscaOuFalha(cozinhaId);
