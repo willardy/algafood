@@ -1,4 +1,4 @@
-package com.willardy.algafood;
+package com.willardy.algafood.integration;
 
 import com.willardy.algafood.domain.model.Cozinha;
 import com.willardy.algafood.domain.model.Restaurante;
@@ -26,7 +26,7 @@ import static org.hamcrest.Matchers.equalTo;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
-public class CadastroRestauranteIT {
+public class CadastroRestauranteIntegrationTest {
 
     private static final String VIOLACAO_DE_REGRA_DE_NEGOCIO_PROBLEM_TYPE = "Violação de regra de negócio";
 

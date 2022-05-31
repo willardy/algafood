@@ -1,4 +1,4 @@
-package com.willardy.algafood;
+package com.willardy.algafood.integration;
 
 import com.willardy.algafood.domain.model.Cozinha;
 import com.willardy.algafood.domain.repository.CozinhaRepository;
@@ -23,7 +23,7 @@ import static org.hamcrest.Matchers.*;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
-class CadastroCozinhaIT {
+class CadastroCozinhaIntegrationTest {
 
     @LocalServerPort
     private int port;
